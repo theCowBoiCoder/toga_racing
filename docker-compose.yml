@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  wordpress:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: toga_wordpress
+    restart: unless-stopped
+    ports:
+      - "${WP_PORT:-8080}:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: ${DB_USER:-toga_user}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD:-toga_secret}
+      WORDPRESS_DB_NAME: ${DB_NAME:-toga_racing}
+      WORDPRESS_DEBUG: ${WP_DEBUG:-false}
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./wp-content/themes/toga-racing:/var/www/html/wp-content/themes/toga-racing
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - toga_net
+
+  db:
+    image: mysql:5.7
+    container_name: toga_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-toga_racing}
+      MYSQL_USER: ${DB_USER:-toga_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-toga_secret}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-toga_root_secret}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - toga_net
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: toga_phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "${PMA_PORT:-8081}:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-toga_root_secret}
+    depends_on:
+      - db
+    networks:
+      - toga_net
+
+volumes:
+  wordpress_data:
+  db_data:
+
+networks:
+  toga_net:
+    driver: bridge

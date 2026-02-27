@@ -1,0 +1,34 @@
+# Environment
+.env
+
+# WordPress core (managed by Docker)
+wp-admin/
+wp-includes/
+wp-*.php
+xmlrpc.php
+index.php
+license.txt
+readme.html
+
+# Uploads (too large for git)
+wp-content/uploads/
+
+# Other themes and plugins (install via WP admin)
+wp-content/plugins/
+wp-content/themes/*/
+!wp-content/themes/toga-racing/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker volumes
+db_data/
+wordpress_data/
