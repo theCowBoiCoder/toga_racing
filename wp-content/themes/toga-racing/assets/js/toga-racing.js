@@ -83,16 +83,36 @@
         let currentIndex = 0;
         let galleryImages = [];
 
-        // Collect all gallery triggers
+        // Get full-size image URL from an element
+        function getImageSrc(el) {
+            // Check if it's a link to an image file
+            var href = el.tagName === 'A' ? el.getAttribute('href') : null;
+            if (href && href.match(/\.(jpg|jpeg|png|gif|webp)/i)) {
+                return href;
+            }
+            // Fall back to the img src (for images without links or linking to attachment pages)
+            var img = el.tagName === 'IMG' ? el : el.querySelector('img');
+            if (img) {
+                // Use full-size src if available
+                return img.getAttribute('data-full-url') || img.getAttribute('data-orig-file') || img.src;
+            }
+            return null;
+        }
+
+        // Collect all gallery images
         function collectImages() {
             galleryImages = [];
-            document.querySelectorAll('.gallery-lightbox-trigger, .gallery-item a, .wp-block-image a').forEach(function (el) {
-                const href = el.getAttribute('href');
-                if (href && (href.match(/\.(jpg|jpeg|png|gif|webp)/i) || el.classList.contains('gallery-lightbox-trigger'))) {
-                    galleryImages.push({
-                        src: href,
-                        caption: el.getAttribute('data-caption') || ''
-                    });
+            var seen = {};
+            document.querySelectorAll('.gallery-page .wp-block-image, .gallery-lightbox-trigger, .gallery-item a').forEach(function (el) {
+                var src = getImageSrc(el);
+                if (src && !seen[src]) {
+                    seen[src] = true;
+                    var caption = el.getAttribute('data-caption') || '';
+                    if (!caption) {
+                        var figcaption = el.querySelector('figcaption');
+                        if (figcaption) caption = figcaption.textContent;
+                    }
+                    galleryImages.push({ src: src, caption: caption });
                 }
             });
         }
@@ -134,18 +154,19 @@
             updateLightboxImage();
         }
 
-        // Event listeners
+        // Event listeners - handle clicks on gallery images
         document.addEventListener('click', function (e) {
-            const trigger = e.target.closest('.gallery-lightbox-trigger, .gallery-item a, .wp-block-image a');
+            // Check for clicks on gallery block images, lightbox triggers, or gallery items
+            var trigger = e.target.closest('.gallery-page .wp-block-image, .gallery-lightbox-trigger, .gallery-item a');
             if (trigger) {
-                const href = trigger.getAttribute('href');
-                if (href && href.match(/\.(jpg|jpeg|png|gif|webp)/i)) {
+                var src = getImageSrc(trigger);
+                if (src) {
                     e.preventDefault();
                     collectImages();
 
                     // Find index
-                    const index = galleryImages.findIndex(function (img) {
-                        return img.src === href;
+                    var index = galleryImages.findIndex(function (img) {
+                        return img.src === src;
                     });
 
                     openLightbox(index >= 0 ? index : 0);

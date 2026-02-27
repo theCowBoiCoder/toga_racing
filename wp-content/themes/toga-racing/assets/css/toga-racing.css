@@ -872,53 +872,71 @@ h4 { font-size: 1.25rem; }
 }
 
 /* WordPress Gallery Block Overrides */
-.gallery-grid .wp-block-gallery,
-.wp-block-gallery {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
-    gap: 15px !important;
-    margin: 0 !important;
-    padding: 0 !important;
+.gallery-page .gallery-grid {
+    display: block !important;
 }
 
-.gallery-grid .wp-block-gallery .wp-block-image,
-.wp-block-gallery .wp-block-image {
+.gallery-page .wp-block-gallery {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)) !important;
+    gap: 20px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+}
+
+.gallery-page .wp-block-gallery .wp-block-image {
     border-radius: var(--border-radius);
     overflow: hidden;
     margin: 0 !important;
     width: 100% !important;
+    cursor: pointer;
 }
 
-.gallery-grid .wp-block-gallery .wp-block-image img,
-.wp-block-gallery .wp-block-image img {
+.gallery-page .wp-block-gallery .wp-block-image a,
+.gallery-page .wp-block-gallery .wp-block-image {
+    display: block;
+}
+
+.gallery-page .wp-block-gallery .wp-block-image img {
     width: 100% !important;
-    height: 100% !important;
-    aspect-ratio: 4 / 3;
+    height: auto !important;
+    aspect-ratio: 16 / 9;
     object-fit: cover;
+    display: block;
+    transition: transform var(--transition);
+}
+
+.gallery-page .wp-block-gallery .wp-block-image:hover img {
+    transform: scale(1.03);
 }
 
 /* WordPress Gallery classic format */
-.gallery-grid .gallery {
+.gallery-page .gallery {
     display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
-    gap: 15px !important;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)) !important;
+    gap: 20px !important;
 }
 
-.gallery-grid .gallery-item {
+.gallery-page .gallery .gallery-item {
     margin: 0 !important;
     padding: 0 !important;
     width: 100% !important;
 }
 
-.gallery-grid .gallery-item img {
+.gallery-page .gallery .gallery-item img {
     width: 100% !important;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 9;
     object-fit: cover;
     border-radius: var(--border-radius);
 }
 
 /* Gutenberg figure wrappers */
-.gallery-grid figure {
+.gallery-page figure.wp-block-gallery {
+    margin: 0 !important;
+}
+
+.gallery-page .wp-block-gallery figure {
     margin: 0 !important;
 }
 
