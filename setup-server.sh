@@ -27,7 +27,13 @@ echo ""
 echo ">>> Updating system..."
 apt update && apt upgrade -y
 
-# 2. Install Nginx, MySQL, PHP 8.1
+# 2. Add PHP repository (Ondrej PPA)
+echo ">>> Adding PHP repository..."
+apt install -y software-properties-common
+add-apt-repository -y ppa:ondrej/php
+apt update
+
+# 3. Install Nginx, MySQL, PHP 8.1
 echo ">>> Installing Nginx, MySQL, PHP 8.1..."
 apt install -y nginx mysql-server php8.1-fpm php8.1-mysql php8.1-curl \
     php8.1-gd php8.1-mbstring php8.1-xml php8.1-zip php8.1-intl \
