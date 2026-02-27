@@ -207,6 +207,36 @@
     }
 
     /**
+     * Division Filter Tabs (Drivers Archive)
+     */
+    function initDivisionTabs() {
+        const tabs = document.querySelectorAll('.division-tab');
+        const cards = document.querySelectorAll('.driver-card');
+
+        if (tabs.length === 0) return;
+
+        tabs.forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                const division = this.getAttribute('data-division');
+
+                // Update active tab
+                tabs.forEach(function (t) { t.classList.remove('active'); });
+                this.classList.add('active');
+
+                // Filter driver cards
+                cards.forEach(function (card) {
+                    const cardDivision = card.getAttribute('data-division');
+                    if (division === 'all' || cardDivision === division) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    }
+
+    /**
      * Smooth scroll for anchor links
      */
     function initSmoothScroll() {
@@ -235,6 +265,7 @@
         initHeaderScroll();
         initLightbox();
         initGalleryFilters();
+        initDivisionTabs();
         initSmoothScroll();
     });
 

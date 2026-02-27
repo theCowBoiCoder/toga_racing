@@ -105,12 +105,29 @@ function toga_racing_driver_details_callback( $post ) {
     $racing_number  = get_post_meta( $post->ID, '_toga_driver_number', true );
     $status         = get_post_meta( $post->ID, '_toga_driver_status', true );
     $role           = get_post_meta( $post->ID, '_toga_driver_role', true );
+    $division       = get_post_meta( $post->ID, '_toga_driver_division', true );
 
     if ( empty( $status ) ) {
         $status = 'active';
     }
+    if ( empty( $division ) ) {
+        $division = 'esports';
+    }
     ?>
     <table class="form-table">
+        <tr>
+            <th><label for="toga_driver_division"><?php esc_html_e( 'Division', 'toga-racing' ); ?></label></th>
+            <td>
+                <select id="toga_driver_division" name="toga_driver_division">
+                    <option value="esports" <?php selected( $division, 'esports' ); ?>><?php esc_html_e( 'Esports', 'toga-racing' ); ?></option>
+                    <option value="academy" <?php selected( $division, 'academy' ); ?>><?php esc_html_e( 'Academy', 'toga-racing' ); ?></option>
+                </select>
+                <p class="description">
+                    <span style="color: #00ff0a; font-weight: bold;">&#9679;</span> <?php esc_html_e( 'Esports = Green', 'toga-racing' ); ?> &nbsp;
+                    <span style="color: #bc111d; font-weight: bold;">&#9679;</span> <?php esc_html_e( 'Academy = Red', 'toga-racing' ); ?>
+                </p>
+            </td>
+        </tr>
         <tr>
             <th><label for="toga_driver_nationality"><?php esc_html_e( 'Nationality', 'toga-racing' ); ?></label></th>
             <td>
@@ -235,6 +252,7 @@ function toga_racing_save_driver_meta( $post_id ) {
         'toga_driver_number'      => '_toga_driver_number',
         'toga_driver_status'      => '_toga_driver_status',
         'toga_driver_role'        => '_toga_driver_role',
+        'toga_driver_division'    => '_toga_driver_division',
     );
 
     foreach ( $text_fields as $field => $meta_key ) {
@@ -275,6 +293,7 @@ function toga_racing_driver_columns( $columns ) {
     $new_columns['cb']          = $columns['cb'];
     $new_columns['title']       = $columns['title'];
     $new_columns['driver_photo'] = __( 'Photo', 'toga-racing' );
+    $new_columns['driver_division'] = __( 'Division', 'toga-racing' );
     $new_columns['driver_number'] = __( '#', 'toga-racing' );
     $new_columns['driver_nationality'] = __( 'Nationality', 'toga-racing' );
     $new_columns['driver_role'] = __( 'Role', 'toga-racing' );
@@ -296,6 +315,15 @@ function toga_racing_driver_column_content( $column, $post_id ) {
             } else {
                 echo '—';
             }
+            break;
+
+        case 'driver_division':
+            $division = get_post_meta( $post_id, '_toga_driver_division', true );
+            $division_labels = array(
+                'esports' => '<span style="color: #00ff0a; font-weight: bold;">Esports</span>',
+                'academy' => '<span style="color: #bc111d; font-weight: bold;">Academy</span>',
+            );
+            echo isset( $division_labels[ $division ] ) ? $division_labels[ $division ] : '—';
             break;
 
         case 'driver_number':

@@ -21,6 +21,19 @@ get_header();
     <section class="section">
         <div class="container">
 
+            <!-- Division Filter Tabs -->
+            <div class="division-tabs">
+                <button class="division-tab active" data-division="all">
+                    <?php esc_html_e( 'All Drivers', 'toga-racing' ); ?>
+                </button>
+                <button class="division-tab tab-esports" data-division="esports">
+                    <?php esc_html_e( 'Esports', 'toga-racing' ); ?>
+                </button>
+                <button class="division-tab tab-academy" data-division="academy">
+                    <?php esc_html_e( 'Academy', 'toga-racing' ); ?>
+                </button>
+            </div>
+
             <?php if ( have_posts() ) : ?>
 
                 <div class="drivers-grid">

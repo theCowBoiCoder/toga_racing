@@ -29,41 +29,67 @@ get_header();
         </div>
     </section>
 
-    <!-- Featured Drivers Section -->
-    <section class="section featured-drivers-section">
+    <!-- Esports Division -->
+    <section class="section featured-drivers-section division-section-esports">
         <div class="container">
-            <h2 class="section-title"><?php esc_html_e( 'Our Drivers', 'toga-racing' ); ?></h2>
-            <p class="section-subtitle"><?php esc_html_e( 'Meet the team behind the wheel.', 'toga-racing' ); ?></p>
+            <h2 class="section-title division-title-esports"><?php esc_html_e( 'Esports Division', 'toga-racing' ); ?></h2>
+            <p class="section-subtitle"><?php esc_html_e( 'Our competitive racing lineup.', 'toga-racing' ); ?></p>
 
             <div class="drivers-grid">
                 <?php
-                $drivers = new WP_Query( array(
+                $esports_drivers = new WP_Query( array(
                     'post_type'      => 'driver',
                     'posts_per_page' => 6,
-                    'meta_key'       => '_toga_driver_status',
-                    'meta_value'     => 'active',
+                    'meta_query'     => array(
+                        array( 'key' => '_toga_driver_status', 'value' => 'active' ),
+                        array( 'key' => '_toga_driver_division', 'value' => 'esports' ),
+                    ),
                     'orderby'        => 'menu_order',
                     'order'          => 'ASC',
                 ) );
 
-                if ( $drivers->have_posts() ) :
-                    while ( $drivers->have_posts() ) : $drivers->the_post();
+                if ( $esports_drivers->have_posts() ) :
+                    while ( $esports_drivers->have_posts() ) : $esports_drivers->the_post();
                         get_template_part( 'template-parts/content', 'driver' );
                     endwhile;
                     wp_reset_postdata();
                 else :
                 ?>
-                    <p class="no-drivers"><?php esc_html_e( 'Drivers coming soon! Add drivers from the WordPress admin.', 'toga-racing' ); ?></p>
+                    <p class="no-drivers"><?php esc_html_e( 'Esports drivers coming soon!', 'toga-racing' ); ?></p>
                 <?php endif; ?>
             </div>
+        </div>
+    </section>
 
-            <?php if ( $drivers->found_posts > 6 ) : ?>
-                <div class="section-cta">
-                    <a href="<?php echo esc_url( get_post_type_archive_link( 'driver' ) ); ?>" class="btn btn-outline">
-                        <?php esc_html_e( 'View All Drivers', 'toga-racing' ); ?>
-                    </a>
-                </div>
-            <?php endif; ?>
+    <!-- Academy Division -->
+    <section class="section featured-drivers-section division-section-academy">
+        <div class="container">
+            <h2 class="section-title division-title-academy"><?php esc_html_e( 'Academy Division', 'toga-racing' ); ?></h2>
+            <p class="section-subtitle"><?php esc_html_e( 'The next generation of TOGA Racing talent.', 'toga-racing' ); ?></p>
+
+            <div class="drivers-grid">
+                <?php
+                $academy_drivers = new WP_Query( array(
+                    'post_type'      => 'driver',
+                    'posts_per_page' => 6,
+                    'meta_query'     => array(
+                        array( 'key' => '_toga_driver_status', 'value' => 'active' ),
+                        array( 'key' => '_toga_driver_division', 'value' => 'academy' ),
+                    ),
+                    'orderby'        => 'menu_order',
+                    'order'          => 'ASC',
+                ) );
+
+                if ( $academy_drivers->have_posts() ) :
+                    while ( $academy_drivers->have_posts() ) : $academy_drivers->the_post();
+                        get_template_part( 'template-parts/content', 'driver' );
+                    endwhile;
+                    wp_reset_postdata();
+                else :
+                ?>
+                    <p class="no-drivers"><?php esc_html_e( 'Academy drivers coming soon!', 'toga-racing' ); ?></p>
+                <?php endif; ?>
+            </div>
         </div>
     </section>
 

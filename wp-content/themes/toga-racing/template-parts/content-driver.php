@@ -10,9 +10,11 @@ $number      = get_post_meta( $driver_id, '_toga_driver_number', true );
 $role        = get_post_meta( $driver_id, '_toga_driver_role', true );
 $nationality = get_post_meta( $driver_id, '_toga_driver_nationality', true );
 $status      = get_post_meta( $driver_id, '_toga_driver_status', true );
+$division    = get_post_meta( $driver_id, '_toga_driver_division', true );
+if ( empty( $division ) ) $division = 'esports';
 ?>
 
-<article id="driver-<?php the_ID(); ?>" <?php post_class( 'driver-card' ); ?>>
+<article id="driver-<?php the_ID(); ?>" <?php post_class( 'driver-card division-' . esc_attr( $division ) ); ?> data-division="<?php echo esc_attr( $division ); ?>">
     <a href="<?php the_permalink(); ?>" class="driver-card-link">
 
         <div class="driver-card-image">
@@ -27,6 +29,10 @@ $status      = get_post_meta( $driver_id, '_toga_driver_status', true );
             <?php if ( $number ) : ?>
                 <span class="driver-card-number-overlay">#<?php echo esc_html( $number ); ?></span>
             <?php endif; ?>
+
+            <span class="driver-card-division-badge division-badge-<?php echo esc_attr( $division ); ?>">
+                <?php echo esc_html( ucfirst( $division ) ); ?>
+            </span>
         </div>
 
         <div class="driver-card-content">

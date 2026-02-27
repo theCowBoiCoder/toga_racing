@@ -12,9 +12,11 @@ $nationality   = get_post_meta( $driver_id, '_toga_driver_nationality', true );
 $number        = get_post_meta( $driver_id, '_toga_driver_number', true );
 $status        = get_post_meta( $driver_id, '_toga_driver_status', true );
 $role          = get_post_meta( $driver_id, '_toga_driver_role', true );
+$division      = get_post_meta( $driver_id, '_toga_driver_division', true );
+if ( empty( $division ) ) $division = 'esports';
 ?>
 
-<main id="primary" class="site-main single-driver-page">
+<main id="primary" class="site-main single-driver-page division-page-<?php echo esc_attr( $division ); ?>">
 
     <!-- Driver Hero -->
     <section class="driver-hero">
@@ -41,6 +43,9 @@ $role          = get_post_meta( $driver_id, '_toga_driver_role', true );
                     <h1 class="driver-name"><?php the_title(); ?></h1>
 
                     <div class="driver-meta-tags">
+                        <span class="driver-tag driver-division division-badge-<?php echo esc_attr( $division ); ?>">
+                            <?php echo esc_html( ucfirst( $division ) ); ?>
+                        </span>
                         <?php if ( $role ) : ?>
                             <span class="driver-tag driver-role"><?php echo esc_html( $role ); ?></span>
                         <?php endif; ?>
