@@ -5,11 +5,13 @@ Official WordPress site for the TOGA Racing esports team.
 ## Tech Stack
 
 - **WordPress 6.x** with custom theme
-- **PHP 8.1** (Apache)
-- **MySQL 5.7**
-- **Docker & Docker Compose**
+- **PHP 8.1-FPM**
+- **MySQL 8.x**
+- **Nginx**
 
-## Quick Start (Development)
+## Local Development (Docker)
+
+Docker files are included for local development:
 
 1. Clone the repo:
    ```bash
@@ -34,14 +36,42 @@ Official WordPress site for the TOGA Racing esports team.
 
 5. Complete the WordPress install wizard, then activate the **TOGA Racing** theme under Appearance > Themes.
 
-## Deployment (Ubuntu Server)
+## Deployment (Ubuntu Server — Nginx + MySQL)
 
-1. Install Docker and Docker Compose on your Ubuntu server.
-2. Clone this repo to the server.
-3. Copy `.env.example` to `.env` and set **strong passwords**.
-4. Run `docker-compose up -d`.
-5. Point your domain's DNS to the server IP.
-6. (Recommended) Set up a reverse proxy (Nginx/Traefik) with SSL via Let's Encrypt.
+### Automated Setup
+
+1. Clone this repo on your Ubuntu server:
+   ```bash
+   git clone https://github.com/theCowBoiCoder/toga_racing.git
+   cd toga_racing
+   ```
+
+2. Edit the variables at the top of `setup-server.sh`:
+   - `DOMAIN` — your domain name
+   - `DB_PASS` — a strong database password
+
+3. Run the setup script:
+   ```bash
+   sudo bash setup-server.sh
+   ```
+
+4. Point your domain's DNS A record to the server IP.
+
+5. Visit your domain to complete the WordPress install wizard.
+
+6. Activate the **TOGA Racing** theme under Appearance > Themes.
+
+7. (Recommended) Install SSL:
+   ```bash
+   sudo apt install certbot python3-certbot-nginx
+   sudo certbot --nginx -d your-domain.com -d www.your-domain.com
+   ```
+
+### Manual Setup
+
+If you prefer to set things up manually, the key files are:
+- `nginx/toga-racing.conf` — Nginx server block config
+- `wp-content/themes/toga-racing/` — the custom theme to copy into your WordPress installation
 
 ## Theme Features
 
